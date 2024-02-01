@@ -38,9 +38,6 @@ const providerConfig = {
     ...(process.env.REACT_APP_AUTH0_AUDIENCE
       ? { audience: process.env.REACT_APP_AUTH0_AUDIENCE }
       : null),
-    // ...(process.env.AUTH0_AUDIENCE
-    //   ? { audience: process.env.AUTH0_AUDIENCE }
-    //   : null),
   },
 };
 

@@ -17,8 +17,8 @@ import {
 import { useEffect, useState } from "react";
 import { MdLocalShipping } from "react-icons/md";
 import { useParams } from "react-router-dom";
-import ProductService from "../api/productService";
-import Utils from "../utils/jsutils";
+import ProductService from "../../api/productService";
+import Utils from "../../utils/jsutils";
 import { Radio, RadioGroup } from "@chakra-ui/react";
 import { green, grey } from "@mui/material/colors";
 import { Form, Formik } from "formik";

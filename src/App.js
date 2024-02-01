@@ -16,9 +16,9 @@ import "./App.css";
 
 // fontawesome
 import initFontAwesome from "./utils/initFontAwesome";
-import AddProduct from "./components/addProduct";
-import ProductGrid from "./components/products";
-import ProductDetails from "./components/productDetails";
+import AddProduct from "./components/product/addProduct";
+import ProductGrid from "./components/product/products";
+import ProductDetails from "./components/product/productDetails";
 import Cart from "./components/cart";
 initFontAwesome();
 

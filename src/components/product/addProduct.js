@@ -14,10 +14,10 @@ import {
 import { Form, Formik, Field, FieldArray } from "formik";
 import { useEffect, useRef, useState } from "react";
 // import CategoryService from "@/api/categoryService";
-import Utils from "./../utils/jsutils";
-import BrandService from "../api/brandService";
-import ProductService from "../api/productService";
-import CategoryService from "../api/categoryService";
+import Utils from "../../utils/jsutils";
+import BrandService from "../../api/brandService";
+import ProductService from "../../api/productService";
+import CategoryService from "../../api/categoryService";
 import { useToast } from "@chakra-ui/react";
 
 const AddProduct = () => {

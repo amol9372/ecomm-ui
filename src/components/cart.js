@@ -9,6 +9,7 @@ import {
   Image,
   Stack,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import { grey } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
@@ -16,6 +17,7 @@ import CartService from "../api/cartService";
 import { Form, Formik } from "formik";
 
 const Cart = () => {
+  const toast = useToast();
   const [cartItems, setCartItems] = useState();
 
   useEffect(() => {
@@ -37,6 +39,41 @@ const Cart = () => {
         }
       })
       .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const deleteCartItem = (id) => {
+    console.log("[Deleting cart item]");
+    const response = CartService.deleteCartItem(id);
+
+    response
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.status === 204) {
+          toast({
+            title: "Item removed from cart.",
+            description: "We've removed the item from cart.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+          const items = cartItems.cartItems.filter((item) => item.id != id);
+          setCartItems((prevState) => ({
+            ...prevState, // copy all existing key-value pairs
+            cartItems: items, // specify the property to update
+          }));
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Failed to remove item",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
         console.log(error);
       });
   };
@@ -93,7 +130,11 @@ const Cart = () => {
                         </CardBody>
 
                         <CardFooter gap={3}>
-                          <Button variant="link" color={"lightgray"}>
+                          <Button
+                            variant="link"
+                            color={"lightgray"}
+                            onClick={() => deleteCartItem(item.id)}
+                          >
                             Delete
                           </Button>
                           {"|"}

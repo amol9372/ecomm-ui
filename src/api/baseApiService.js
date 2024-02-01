@@ -28,7 +28,7 @@ class BaseService {
       });
 
       //console.log(res);
-      if (res.status === 200) {
+      if (res.status >= 200 && res.status < 300) {
         response = Response(res);
       }
     } catch (error) {
@@ -55,7 +55,7 @@ class BaseService {
       const res = await axios.post(url, body, config);
 
       console.log(res);
-      if (res.status === 200 || res.status === 201) {
+      if (res.status >= 200 && res.status < 300) {
         response = Response(res);
       }
     } catch (error) {
@@ -85,7 +85,7 @@ class BaseService {
       const res = await axios.put(url, body, config);
 
       console.log(res);
-      if (res.status === 201) {
+      if (res.status >= 200 && res.status < 300) {
         response = Response(res);
       }
     } catch (error) {
@@ -115,7 +115,7 @@ class BaseService {
       const res = await axios.delete(url, config);
 
       console.log(res);
-      if (res.status === 200 || res.status === 201) {
+      if (res.status >= 200 && res.status < 300) {
         response = Response(res);
       }
     } catch (error) {

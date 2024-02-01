@@ -12,6 +12,10 @@ class CartService extends BaseService {
   static async getCartItems() {
     return BaseService.get(null, "/cart");
   }
+
+  static async deleteCartItem(id) {
+    return BaseService.delete(null, "/cart/".concat(id));
+  }
 }
 
 export default CartService;

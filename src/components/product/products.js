@@ -1,12 +1,12 @@
 import { Checkbox, CheckboxGroup, SimpleGrid, Stack } from "@chakra-ui/react";
 import ProductCard from "./productCard";
 import { useEffect, useState } from "react";
-import ProductService from "../api/productService";
-import CustomizedTreeView from "./categoryTree";
+import ProductService from "../../api/productService";
+import CustomizedTreeView from "../categoryTree";
 import { ThemeProvider } from "@mui/material";
-import theme from "../theme";
+import theme from "../../theme";
 import { Heading } from "@chakra-ui/react";
-import CategoryService from "../api/categoryService";
+import CategoryService from "../../api/categoryService";
 
 const ProductGrid = () => {
   const [products, setProducts] = useState([]);
