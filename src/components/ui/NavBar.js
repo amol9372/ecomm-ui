@@ -19,10 +19,8 @@ import {
 } from "reactstrap";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import styled from "@emotion/styled";
-import { Badge, IconButton } from "@chakra-ui/react";
-import { ShoppingCart, ShoppingCartTwoTone } from "@mui/icons-material";
-import Cart from "./cart";
+import { IconButton } from "@chakra-ui/react";
+import { ShoppingCartTwoTone } from "@mui/icons-material";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);

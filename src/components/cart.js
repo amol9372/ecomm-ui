@@ -3,7 +3,6 @@ import {
   Card,
   CardBody,
   CardFooter,
-  Divider,
   Flex,
   Heading,
   Image,
@@ -11,14 +10,15 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import { grey } from "@mui/material/colors";
 import React, { useEffect, useState } from "react";
 import CartService from "../api/cartService";
 import { Form, Formik } from "formik";
+import { useHistory } from "react-router-dom";
 
-const Cart = () => {
+const Cart = ({ reusable }) => {
   const toast = useToast();
   const [cartItems, setCartItems] = useState();
+  const history = useHistory();
 
   useEffect(() => {
     getCartItems();
@@ -86,6 +86,7 @@ const Cart = () => {
           // alert(JSON.stringify(values, null, 2));
           //   console.log("final output ::: ", values);
           // addProductToCart();
+          history.push("/checkout");
           setSubmitting(false);
         }, 400);
       }}
@@ -146,7 +147,7 @@ const Cart = () => {
                     </Card>
                   ))}
               </Flex>
-              {cartItems && (
+              {reusable && cartItems && (
                 <Flex direction={"column"} width={400}>
                   <Stack gridGap={6}>
                     <Heading size="md" marginRight={1}>
