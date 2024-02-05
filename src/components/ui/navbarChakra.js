@@ -23,6 +23,12 @@ import { IconButton } from "@chakra-ui/react";
 import { ShoppingCartTwoTone } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Logo from "./../../assets/logo.png";
+import { useCustomAuth } from "../user-auth/authContext";
+import Avatar from "@mui/material/Avatar";
+import { useEffect, useState } from "react";
+import { ThemeProvider } from "@mui/material";
+import theme from "../../theme";
+import { useHistory } from "react-router-dom";
 
 const Links = [
   { link: "Home", href: "/" },
@@ -31,8 +37,52 @@ const Links = [
 ];
 
 export const NavbarChakra = () => {
+  const history = useHistory();
+  const [loggedInUser, setLoggedInUser] = useState();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { appLogin, appLogout, appUser, isAppUserAuthenticated } =
+    useCustomAuth();
+
+  const login = () => {
+    history.push("/login");
+  };
+
+  useEffect(() => {
+    const loggedUser = appUser() ? appUser() : user;
+    if (loggedUser) {
+      setLoggedInUser(loggedUser);
+    }
+  }, []);
+
+  function stringToColor(string) {
+    let hash = 0;
+    let i;
+
+    /* eslint-disable no-bitwise */
+    for (i = 0; i < string.length; i += 1) {
+      hash = string.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    let color = "#";
+
+    for (i = 0; i < 3; i += 1) {
+      const value = (hash >> (i * 8)) & 0xff;
+      color += `00${value.toString(16)}`.slice(-2);
+    }
+    /* eslint-enable no-bitwise */
+
+    return color;
+  }
+
+  function stringAvatar(name) {
+    return {
+      sx: {
+        bgcolor: stringToColor(name),
+      },
+      children: `${name.charAt(0)}`,
+    };
+  }
 
   const logoutWithRedirect = () =>
     logout({
@@ -80,33 +130,36 @@ export const NavbarChakra = () => {
           </HStack>
           {/* <Flex alignItems={"center"}> */}
           <Nav className="d-none d-md-block" navbar>
-            {!isAuthenticated && (
+            {!loggedInUser && (
               <NavItem>
                 <Button
                   id="qsLoginBtn"
                   color="primary"
                   className="btn-margin"
-                  onClick={() => loginWithRedirect()}
+                  // onClick={() => loginWithRedirect()}
+                  onClick={login}
                 >
                   Log in
                 </Button>
               </NavItem>
             )}
           </Nav>
-
-          {isAuthenticated && (
+          {loggedInUser && (
             <Flex h={6} alignItems={"center"} justifyContent={"space-between"}>
               <UncontrolledDropdown nav inNavbar>
                 <DropdownToggle nav caret id="profileDropDown">
-                  <img
+                  {/* <img
                     src={user.picture}
                     alt="Profile"
                     className="nav-user-profile rounded-circle"
                     width="38"
-                  />
+                  /> */}
+                  <ThemeProvider theme={theme}>
+                    <Avatar {...stringAvatar(loggedInUser.name)} />
+                  </ThemeProvider>
                 </DropdownToggle>
                 <DropdownMenu>
-                  <DropdownItem header>{user.name}</DropdownItem>
+                  <DropdownItem header>{loggedInUser.name}</DropdownItem>
                   <DropdownItem
                     tag={RouterNavLink}
                     to="/profile"
@@ -146,14 +199,15 @@ export const NavbarChakra = () => {
             </Flex>
           )}
 
-          {!isAuthenticated && (
+          {!loggedInUser && (
             <Nav className="d-md-none" navbar>
               <NavItem>
                 <Button
                   id="qsLoginBtn"
                   color="primary"
                   block
-                  onClick={() => loginWithRedirect({})}
+                  // onClick={() => loginWithRedirect({})}
+                  onClick={login}
                 >
                   Log in
                 </Button>

@@ -21,10 +21,22 @@ import {
 import { useAuth0 } from "@auth0/auth0-react";
 import { IconButton } from "@chakra-ui/react";
 import { ShoppingCartTwoTone } from "@mui/icons-material";
+import { useCustomAuth } from "../user-auth/authContext";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
+  const { appLogin, appLogout, appUser, isAppUserAuthenticated } =
+    useCustomAuth();
+
+  const authenticated = () => {
+    if (isAuthenticated || isAppUserAuthenticated) {
+      return true;
+    }
+
+    return false;
+  };
+
   const toggle = () => setIsOpen(!isOpen);
 
   const logoutWithRedirect = () =>
@@ -98,7 +110,7 @@ const NavBar = () => {
                   </Button>
                 </NavItem>
               )}
-              {isAuthenticated && (
+              {authenticated && (
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret id="profileDropDown">
                     <img
@@ -129,7 +141,7 @@ const NavBar = () => {
                 </UncontrolledDropdown>
               )}
             </Nav>
-            {!isAuthenticated && (
+            {!authenticated && (
               <Nav className="d-md-none" navbar>
                 <NavItem>
                   <Button
@@ -162,7 +174,7 @@ const NavBar = () => {
                 </NavLink>
               </NavItem>
             </Nav>
-            {isAuthenticated && (
+            {authenticated && (
               <Nav
                 className="d-md-none justify-content-between"
                 navbar

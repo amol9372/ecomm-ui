@@ -8,14 +8,14 @@ export const errorResponse = (error) => {
   return { message: error.data.description, status: error.status };
 };
 
-class AddressService extends BaseService {
-  static async getAllAdresses() {
-    return BaseService.get(null, "/address");
+class AuthService extends BaseService {
+  static async authenticate(credentials) {
+    return BaseService.post(credentials, "/auth/login");
   }
 
-  static async createAddress(address) {
-    return BaseService.post(address, "/address");
+  static async register(user) {
+    return BaseService.post(user, "/auth/register");
   }
 }
 
-export default AddressService;
+export default AuthService;

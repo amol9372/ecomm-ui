@@ -24,6 +24,7 @@ class BaseService {
           Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
+          "x-token-type": localStorage.getItem("tokenType"),
         },
       });
 
@@ -46,6 +47,7 @@ class BaseService {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-token-type": localStorage.getItem("tokenType"),
       },
     };
 
@@ -76,6 +78,7 @@ class BaseService {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-token-type": localStorage.getItem("tokenType"),
       },
     };
 
@@ -106,6 +109,7 @@ class BaseService {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token")}`,
+        "x-token-type": localStorage.getItem("tokenType"),
       },
     };
 

@@ -14,23 +14,56 @@ import {
   Select,
   background,
   color,
+  useToast,
 } from "@chakra-ui/react";
+import AddressService from "../api/addressService";
 
 const AddressModal = ({ isOpen, onClose, onSubmit }) => {
+  const toast = useToast();
   const handleSubmit = (event) => {
     event.preventDefault();
     // Extract form data and pass it to onSubmit
     const formData = new FormData(event.currentTarget);
     const addressData = {
       name: formData.get("name"),
-      street: formData.get("street"),
+      streetAddress: formData.get("street"),
       city: formData.get("city"),
-      stateProvince: formData.get("stateProvince"),
-      zipPostalCode: formData.get("zipPostalCode"),
+      state: formData.get("stateProvince"),
+      postalCode: formData.get("zipPostalCode"),
       country: formData.get("country"),
+      defaultAddress: formData.get("defaultAddress"),
     };
-    onSubmit(addressData);
+    addAddress(addressData);
     onClose();
+  };
+
+  const addAddress = (address) => {
+    const response = AddressService.createAddress(address);
+
+    response
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.status === 204 || res.status === 201 || res.status === 202) {
+          toast({
+            title: "Address created Successfully",
+            description: "Address created for the cart",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((error) => {
+        toast({
+          title: "Failed to add address",
+          description: error.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        console.log(error);
+      });
   };
 
   return (
@@ -66,6 +99,13 @@ const AddressModal = ({ isOpen, onClose, onSubmit }) => {
               <Select name="country" placeholder="Select country">
                 <option value="CA">Canada</option>
                 <option value="US">US</option>
+              </Select>
+            </FormControl>
+            <FormControl mt={4} isRequired>
+              <FormLabel>Default</FormLabel>
+              <Select name="defaultAddress" placeholder="Select Type">
+                <option value={true}>True</option>
+                <option value={false}>False</option>
               </Select>
             </FormControl>
           </ModalBody>

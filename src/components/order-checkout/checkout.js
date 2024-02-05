@@ -9,15 +9,17 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import OrderTotal from "./orderTotal"; // Import the OrderTotal component
-import Address from "./address";
+import Address from "../address";
 import Cart from "./cart";
 import { Form, Formik } from "formik";
-import OrderService from "../api/orderService";
+import OrderService from "../../api/orderService";
+import { useHistory } from "react-router-dom";
 
 const Checkout = () => {
   const paymentMethod = "Stripe";
 
   const toast = useToast();
+  const history = useHistory();
 
   const placeOrder = async () => {
     console.log("[Creating order]");
@@ -36,6 +38,7 @@ const Checkout = () => {
             isClosable: true,
           });
         }
+        history.push("/order-submitted");
       })
       .catch((error) => {
         toast({

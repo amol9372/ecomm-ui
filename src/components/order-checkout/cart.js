@@ -11,13 +11,14 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import CartService from "../api/cartService";
+import CartService from "../../api/cartService";
 import { Form, Formik } from "formik";
 import { useHistory } from "react-router-dom";
+import NoItemsComponent from "../ui/itemsNotFound";
 
 const Cart = ({ reusable }) => {
   const toast = useToast();
-  const [cartItems, setCartItems] = useState();
+  const [cartItems, setCartItems] = useState({ cartItems: [] });
   const history = useHistory();
 
   useEffect(() => {
@@ -97,7 +98,7 @@ const Cart = ({ reusable }) => {
           <Form>
             <Flex direction={"row"} gridGap={20}>
               <Flex direction={"column"} gap={6}>
-                {cartItems &&
+                {cartItems && cartItems.cartItems.length > 0 ? (
                   cartItems.cartItems.map((item) => (
                     <Card
                       direction={{ base: "column", sm: "row" }}
@@ -145,9 +146,12 @@ const Cart = ({ reusable }) => {
                         </CardFooter>
                       </Stack>
                     </Card>
-                  ))}
+                  ))
+                ) : (
+                  <NoItemsComponent />
+                )}
               </Flex>
-              {reusable && cartItems && (
+              {reusable && cartItems.cartItems.length > 0 && (
                 <Flex direction={"column"} width={400}>
                   <Stack gridGap={6}>
                     <Heading size="md" marginRight={1}>

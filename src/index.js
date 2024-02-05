@@ -12,6 +12,7 @@ import {
   ChakraProvider,
   extendTheme,
 } from "@chakra-ui/react";
+import { CustomAuthProvider } from "./components/user-auth/authContext";
 
 const theme = extendTheme({
   config: {
@@ -44,9 +45,11 @@ const providerConfig = {
 const root = createRoot(document.getElementById("root"));
 root.render(
   <Auth0Provider {...providerConfig}>
-    <ChakraProvider resetCSS theme={theme}>
-      <App />
-    </ChakraProvider>
+    <CustomAuthProvider>
+      <ChakraProvider resetCSS theme={theme}>
+        <App />
+      </ChakraProvider>
+    </CustomAuthProvider>
   </Auth0Provider>
 );
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, VStack, Text, Divider, Heading } from "@chakra-ui/react";
-import OrderService from "../api/orderService";
+import OrderService from "../../api/orderService";
 
 const OrderTotal = () => {
   const calculateTotal = () => {
