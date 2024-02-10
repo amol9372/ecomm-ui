@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useCallback } from "react";
 import AuthService from "../../api/authService";
 import { useToast } from "@chakra-ui/toast";
-import { useHistory } from "react-router-dom";
+import history from "../../utils/history";
 
 const CustomAuthContext = createContext(null);
 
@@ -9,7 +9,7 @@ export const useCustomAuth = () => useContext(CustomAuthContext);
 
 export const CustomAuthProvider = ({ children }) => {
   const toast = useToast();
-  const history = useHistory();
+  // const history = useHistory();
 
   const appLogin = useCallback((username, password) => {
     const response = AuthService.authenticate({
@@ -33,7 +33,7 @@ export const CustomAuthProvider = ({ children }) => {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("user", JSON.stringify(res.data.userInfo));
           localStorage.setItem("tokenType", "app");
-          history.push("/home");
+          redirect();
         } else {
           toast({
             title: "Authentication failed.",
@@ -49,8 +49,13 @@ export const CustomAuthProvider = ({ children }) => {
       });
   }, []);
 
+  const redirect = () => {
+    window.location.reload(false);
+  };
+
   const appLogout = useCallback(() => {
     localStorage.clear();
+    window.location.reload(false);
   }, []);
 
   const isAppUserAuthenticated = useCallback(() => {

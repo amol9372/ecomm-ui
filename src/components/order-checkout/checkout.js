@@ -29,16 +29,9 @@ const Checkout = () => {
       .then((res) => {
         console.log(res.data);
 
-        if (res.status === 204 || res.status === 200 || res.status === 202) {
-          toast({
-            title: "Order created Successfully",
-            description: "Order created for the cart",
-            status: "success",
-            duration: 3000,
-            isClosable: true,
-          });
+        if (res.status === 204 || res.status === 200 || res.status === 201) {
+          window.open(res.data.link);
         }
-        history.push("/order-submitted");
       })
       .catch((error) => {
         toast({

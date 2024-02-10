@@ -51,16 +51,20 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/home" exact component={Home} />
             <Route path="/login" exact component={LoginUser} />
-            <Route path="/profile" component={Profile} />
-            <Route path="/external-api" component={ExternalApi} />
-            <Route path="/add-product" component={AddProduct} />
-            <Route path="/product/:productId" component={ProductDetails} />
-            <Route path="/product" component={ProductGrid} />
+            {/* <Route path="/profile" exact component={Profile} /> */}
+            {/* <Route path="/external-api" exact component={ExternalApi} /> */}
+            <Route path="/add-product" exact component={AddProduct} />
+            <Route
+              path="/product/:productId"
+              exact
+              component={ProductDetails}
+            />
+            <Route path="/product" exact component={ProductGrid} />
             <Route
               path="/cart"
               render={(props) => <Cart {...props} {...props} reusable={true} />}
             />
-            <Route path="/checkout" component={Checkout} />
+            <Route path="/checkout" exact component={Checkout} />
             <Route path="/test" exact component={MyComponent} />
             <Route path="/order-submitted" exact component={OrderSubmitted} />
           </Switch>

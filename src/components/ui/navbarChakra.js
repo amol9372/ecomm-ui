@@ -84,12 +84,13 @@ export const NavbarChakra = () => {
     };
   }
 
-  const logoutWithRedirect = () =>
-    logout({
-      logoutParams: {
-        returnTo: window.location.origin,
-      },
-    });
+  const logoutWithRedirect = () => {
+    // logout({
+    //   logoutParams: {
+    //     returnTo: window.location.origin,
+    //   },
+    appLogout();
+  };
 
   return (
     <>
@@ -116,16 +117,17 @@ export const NavbarChakra = () => {
               spacing={4}
               display={{ base: "none", md: "flex" }}
             >
-              {Links.map((item) => (
-                <NavLink
-                  tag={RouterNavLink}
-                  to={item.href}
-                  exact
-                  activeClassName="router-link-exact-active"
-                >
-                  {item.link}
-                </NavLink>
-              ))}
+              {loggedInUser &&
+                Links.map((item) => (
+                  <NavLink
+                    tag={RouterNavLink}
+                    to={item.href}
+                    exact
+                    activeClassName="router-link-exact-active"
+                  >
+                    {item.link}
+                  </NavLink>
+                ))}
             </HStack>
           </HStack>
           {/* <Flex alignItems={"center"}> */}
