@@ -21,6 +21,8 @@ import LoginUser from "./components/user-auth/loginUser";
 import { MyComponent } from "./components/testcomponent";
 import { useCustomAuth } from "./components/user-auth/authContext";
 import { OrderSubmitted } from "./components/ui/orderSubmitted";
+import MySocketComponent from "./events";
+import Events from "./events";
 initFontAwesome();
 
 const App = () => {
@@ -67,6 +69,7 @@ const App = () => {
             <Route path="/checkout" exact component={Checkout} />
             <Route path="/test" exact component={MyComponent} />
             <Route path="/order-submitted" exact component={OrderSubmitted} />
+            <Route path="/events" exact component={Events} />
           </Switch>
         </Container>
         <Footer />

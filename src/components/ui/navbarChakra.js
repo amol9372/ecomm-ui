@@ -34,6 +34,7 @@ const Links = [
   { link: "Home", href: "/" },
   { link: "Add Product", href: "/add-product" },
   { link: "Products", href: "/product" },
+  { link: "Events", href: "/events" },
 ];
 
 export const NavbarChakra = () => {
