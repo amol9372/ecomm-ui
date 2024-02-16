@@ -72,7 +72,7 @@ export const NavbarChakra = ({ count }) => {
         if (user) {
           console.log("logged in user", user);
           setLoggedInUser(user);
-          setCartItemsCount();
+          // setCartItemsCount();
           setIsAdmin(user.role === "ADMIN" ? true : false);
           history.push("/home");
         } else {
@@ -135,7 +135,13 @@ export const NavbarChakra = ({ count }) => {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
+      <Box
+        bg={useColorModeValue("gray.100", "gray.900")}
+        px={4}
+        position="sticky" // Makes the navbar sticky
+        top={0} // Position it at the top of the viewport
+        zIndex={1} // Ensure it's above other content; adjust as needed
+      >
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
             size={"md"}
