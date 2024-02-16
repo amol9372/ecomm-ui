@@ -5,6 +5,7 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  Link,
 } from "@chakra-ui/react";
 import {
   Nav,
@@ -20,40 +21,67 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { NavLink as RouterNavLink } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { IconButton } from "@chakra-ui/react";
-import { ShoppingCartTwoTone } from "@mui/icons-material";
+// import { ShoppingCartTwoTone } from "@mui/icons-material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Logo from "./../../assets/logo.png";
 import { useCustomAuth } from "../user-auth/authContext";
 import Avatar from "@mui/material/Avatar";
 import { useEffect, useState } from "react";
-import { ThemeProvider } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import theme from "../../theme";
 import { useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom/cjs/react-router-dom";
+import CartService from "../../api/cartService";
+// import { CartIconButtonWithBadge } from "./cartIcon";
+import { ShoppingCart } from "@mui/icons-material";
+import Badge, { BadgeProps } from "@mui/material/Badge";
+import { styled } from "@mui/material/styles";
+import CartIconButton from "./cartIcon";
 
 const Links = [
   { link: "Home", href: "/" },
-  { link: "Add Product", href: "/add-product" },
   { link: "Products", href: "/product" },
+];
+
+const adminLinks = [
+  { link: "Add Product", href: "/add-product" },
   { link: "Events", href: "/events" },
 ];
 
-export const NavbarChakra = () => {
+export const NavbarChakra = ({ count }) => {
+  console.log("Count in NavbarChakra:", count);
+  const defaultTheme = createTheme();
+  const fontSize = theme.typography.pxToRem(24);
   const history = useHistory();
   const [loggedInUser, setLoggedInUser] = useState();
+  const [isAdmin, setIsAdmin] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, isAuthenticated, loginWithRedirect, logout } = useAuth0();
   const { appLogin, appLogout, appUser, isAppUserAuthenticated } =
     useCustomAuth();
+  const location = useLocation();
+  // const [count, setCount] = useState(0);
 
   const login = () => {
     history.push("/login");
   };
 
   useEffect(() => {
-    const loggedUser = appUser() ? appUser() : user;
-    if (loggedUser) {
-      setLoggedInUser(loggedUser);
-    }
+    appUser()
+      .then((user) => {
+        if (user) {
+          console.log("logged in user", user);
+          setLoggedInUser(user);
+          setCartItemsCount();
+          setIsAdmin(user.role === "ADMIN" ? true : false);
+          history.push("/home");
+        } else {
+          history.push("/login");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   function stringToColor(string) {
@@ -93,6 +121,18 @@ export const NavbarChakra = () => {
     appLogout();
   };
 
+  const activeLinkStyle = {
+    backgroundColor: "lightgrey", // Light grey background
+    fontWeight: "bold", // Bold text
+    color: "blue", // Blue text color
+    textDecoration: "none", // No underline
+  };
+
+  const inactiveLinkStyle = {
+    textDecoration: "none", // No underline for inactive links
+    color: "inherit", // Default text color
+  };
+
   return (
     <>
       <Box bg={useColorModeValue("gray.100", "gray.900")} px={4}>
@@ -121,10 +161,33 @@ export const NavbarChakra = () => {
               {loggedInUser &&
                 Links.map((item) => (
                   <NavLink
+                    as={RouterNavLink}
                     tag={RouterNavLink}
                     to={item.href}
                     exact
                     activeClassName="router-link-exact-active"
+                    style={
+                      location.pathname === item.href
+                        ? activeLinkStyle
+                        : inactiveLinkStyle
+                    }
+                  >
+                    {item.link}
+                  </NavLink>
+                ))}
+
+              {isAdmin &&
+                adminLinks.map((item) => (
+                  <NavLink
+                    tag={RouterNavLink}
+                    to={item.href}
+                    exact
+                    activeClassName="router-link-exact-active"
+                    style={
+                      location.pathname === item.href
+                        ? activeLinkStyle
+                        : inactiveLinkStyle
+                    }
                   >
                     {item.link}
                   </NavLink>
@@ -188,14 +251,16 @@ export const NavbarChakra = () => {
                     exact
                     // activeClassName="router-link-exact-active"
                   >
-                    <IconButton
+                    {/* <IconButton
                       isRound={true}
                       variant="solid"
                       colorScheme="green"
                       aria-label="Done"
                       fontSize="100"
-                      icon={<ShoppingCartTwoTone />}
+                      icon={<CartIconButtonWithBadge badgeCount={count} />}
                     />
+                    */}
+                    <CartIconButton count={count} />
                   </NavLink>
                 </NavItem>
               </Nav>

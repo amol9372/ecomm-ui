@@ -14,6 +14,7 @@ const theme = createTheme({
       main: red.A400,
     },
   },
+  typography: { pxToRem: (size) => `${size / 16}rem` },
 });
 
 export default theme;

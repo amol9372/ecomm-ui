@@ -1,4 +1,5 @@
 import axios from "axios";
+import StorageUtils from "../utils/storageUtils";
 axios.defaults.headers.common["X-Requested-With"] = "XmlHttpRequest";
 axios.defaults.baseURL = process.env.REACT_APP_SERVER_BASE_URL;
 axios.defaults.withCredentials = true;
@@ -8,10 +9,22 @@ export const Response = (res) => {
 };
 
 export const errorResponse = (error) => {
+  if (error.status === 401) {
+    // clear user & token
+    StorageUtils.clear();
+    window.location.href = "/login";
+  }
   return { message: error.data.description, status: error.status };
 };
 
 class BaseService {
+  static async getAuthorizationHeaders() {
+    return {
+      Authorization: `Bearer ${await StorageUtils.loadData("token")}`,
+      "x-token-type": await StorageUtils.loadData("tokenType"),
+    };
+  }
+
   static async get(body, url) {
     let response;
 
@@ -23,8 +36,7 @@ class BaseService {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          "x-token-type": localStorage.getItem("tokenType"),
+          ...(await this.getAuthorizationHeaders()),
         },
       });
 
@@ -46,8 +58,7 @@ class BaseService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "x-token-type": localStorage.getItem("tokenType"),
+        ...(await this.getAuthorizationHeaders()),
       },
     };
 
@@ -77,8 +88,7 @@ class BaseService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "x-token-type": localStorage.getItem("tokenType"),
+        ...(await this.getAuthorizationHeaders()),
       },
     };
 
@@ -108,8 +118,7 @@ class BaseService {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-        "x-token-type": localStorage.getItem("tokenType"),
+        ...(await this.getAuthorizationHeaders()),
       },
     };
 

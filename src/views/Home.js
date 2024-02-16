@@ -5,7 +5,6 @@ import Content from "../components/Content";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useCustomAuth } from "../components/user-auth/authContext";
 import history from "../utils/history";
-import MySocketComponent from "../events";
 
 const Home = () => {
   const [loggedInUser, setLoggedInUser] = useState();
@@ -13,13 +12,17 @@ const Home = () => {
   const { appUser } = useCustomAuth();
 
   useEffect(() => {
-    const loggedUser = appUser() ? appUser() : user;
-    if (loggedUser) {
-      setLoggedInUser(loggedUser);
-      history.push("/home");
-    } else {
-      history.push("/login");
-    }
+    // appUser()
+    //   .then((user) => {
+    //     if (user) {
+    //       history.push("/home");
+    //     } else {
+    //       history.push("/login");
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   }, []);
 
   return (

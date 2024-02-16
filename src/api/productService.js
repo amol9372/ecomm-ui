@@ -22,7 +22,6 @@ class ProductService extends BaseService {
   }
 
   static async fetchAllProducts(categoryId) {
-    // const user = JSON.parse(localStorage.getItem("user"));
     return BaseService.post(
       {
         searchTerm: "",

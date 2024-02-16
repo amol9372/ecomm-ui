@@ -16,7 +16,7 @@ import { Form, Formik } from "formik";
 import { useHistory } from "react-router-dom";
 import NoItemsComponent from "../ui/itemsNotFound";
 
-const Cart = ({ reusable }) => {
+const Cart = ({ reusable, updateCount }) => {
   const toast = useToast();
   const [cartItems, setCartItems] = useState({ cartItems: [] });
   const history = useHistory();
@@ -24,6 +24,10 @@ const Cart = ({ reusable }) => {
   useEffect(() => {
     getCartItems();
   }, []);
+
+  const adjustCartItemsCount = (itemsCount) => {
+    updateCount(itemsCount);
+  };
 
   const getCartItems = async () => {
     console.log("[Fetching cart items]");
@@ -65,6 +69,7 @@ const Cart = ({ reusable }) => {
             ...prevState, // copy all existing key-value pairs
             cartItems: items, // specify the property to update
           }));
+          adjustCartItemsCount(items.length);
         }
       })
       .catch((error) => {

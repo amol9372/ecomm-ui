@@ -23,7 +23,7 @@ import { Radio, RadioGroup } from "@chakra-ui/react";
 import { green, grey } from "@mui/material/colors";
 import { Form, Formik } from "formik";
 
-const ProductDetails = () => {
+const ProductDetails = ({ addCount }) => {
   const toast = useToast();
   const { productId } = useParams();
   const [product, setProduct] = useState();
@@ -111,6 +111,10 @@ const ProductDetails = () => {
     console.log(selectedVariant);
   };
 
+  const adjustCartItemsCount = () => {
+    addCount(0, "add");
+  };
+
   const addProductToCart = () => {
     const response = ProductService.addProductToCart({
       product_id: product.id,
@@ -131,6 +135,8 @@ const ProductDetails = () => {
             isClosable: true,
           });
         }
+
+        adjustCartItemsCount();
       })
       .catch((error) => {
         toast({

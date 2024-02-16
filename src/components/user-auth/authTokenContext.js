@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
+import StorageUtils from "../../utils/storageUtils";
 
 const AuthTokenContext = createContext(null);
 
@@ -12,7 +13,7 @@ export const AuthTokenProvider = ({ children }) => {
       try {
         const token = await getAccessTokenSilently();
         setAuthToken(token);
-        localStorage.setItem("token", token);
+        StorageUtils.saveData("token", token);
       } catch (error) {
         console.error("Error getting the access token", error);
       }

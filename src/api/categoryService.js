@@ -10,7 +10,7 @@ export const errorResponse = (error) => {
 
 class CategoryService extends BaseService {
   static async getAllCategories() {
-    return BaseService.get(null, "/admin/category");
+    return BaseService.get(null, "/category");
   }
 
   static async getFeatureNames(category) {

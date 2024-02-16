@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { Router, Route, Switch } from "react-router-dom";
 import { Container } from "reactstrap";
-import Loading from "./components/ui/Loading";
 import Footer from "./components/ui/Footer";
 import Home from "./views/Home";
-import Profile from "./views/Profile";
-import ExternalApi from "./views/ExternalApi";
 import { useAuth0 } from "@auth0/auth0-react";
 import history from "./utils/history";
 import "./App.css";
@@ -23,17 +19,21 @@ import { useCustomAuth } from "./components/user-auth/authContext";
 import { OrderSubmitted } from "./components/ui/orderSubmitted";
 import MySocketComponent from "./events";
 import Events from "./events";
+import CartService from "./api/cartService";
+import { stepButtonClasses } from "@mui/material";
 initFontAwesome();
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState();
   const { user, isLoading, error } = useAuth0();
   const { appUser } = useCustomAuth();
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const loggedUser = appUser() ? appUser() : user;
     if (loggedUser) {
       setLoggedInUser(loggedUser);
+      setCartItemsCount();
       history.push("/home");
     } else {
       history.push("/login");
@@ -44,10 +44,38 @@ const App = () => {
   //   return <div>Oops... {error.message}</div>;
   // }
 
+  const setCartItemsCount = async () => {
+    console.log("[Fetching cart items]");
+    const response = CartService.getCartItems();
+
+    response
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.status === 200) {
+          if (res.data.cartItems) {
+            setCount(res.data.cartItems.length);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
+  const updateCount = (cartItemCount, modifier) => {
+    if (modifier === "add") {
+      setCount((prevCount) => prevCount + 1);
+    } else {
+      setCount(() => cartItemCount);
+    }
+    console.log("updating count to ::: ", count);
+  };
+
   return (
     <Router history={history}>
       <div id="app" className="d-flex flex-column h-100">
-        <NavbarChakra />
+        <NavbarChakra count={count} />
         <Container className="flex-grow-1 mt-5">
           <Switch>
             <Route path="/" exact component={Home} />
@@ -59,12 +87,27 @@ const App = () => {
             <Route
               path="/product/:productId"
               exact
-              component={ProductDetails}
+              render={(props) => (
+                <ProductDetails
+                  {...props}
+                  {...props}
+                  addCount={(newCount, modifier) =>
+                    updateCount(newCount, modifier)
+                  }
+                />
+              )}
             />
             <Route path="/product" exact component={ProductGrid} />
             <Route
               path="/cart"
-              render={(props) => <Cart {...props} {...props} reusable={true} />}
+              render={(props) => (
+                <Cart
+                  {...props}
+                  {...props}
+                  reusable={true}
+                  updateCount={updateCount}
+                />
+              )}
             />
             <Route path="/checkout" exact component={Checkout} />
             <Route path="/test" exact component={MyComponent} />

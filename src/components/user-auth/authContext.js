@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useCallback } from "react";
 import AuthService from "../../api/authService";
 import { useToast } from "@chakra-ui/toast";
-import history from "../../utils/history";
+import StorageUtils from "../../utils/storageUtils";
 
 const CustomAuthContext = createContext(null);
 
@@ -9,7 +9,6 @@ export const useCustomAuth = () => useContext(CustomAuthContext);
 
 export const CustomAuthProvider = ({ children }) => {
   const toast = useToast();
-  // const history = useHistory();
 
   const appLogin = useCallback((username, password) => {
     const response = AuthService.authenticate({
@@ -30,10 +29,13 @@ export const CustomAuthProvider = ({ children }) => {
             isClosable: true,
           });
 
-          localStorage.setItem("token", res.data.token);
-          localStorage.setItem("user", JSON.stringify(res.data.userInfo));
-          localStorage.setItem("tokenType", "app");
-          redirect();
+          StorageUtils.saveData("token", res.data.token);
+          StorageUtils.saveData("tokenType", "app");
+          StorageUtils.saveData("user", JSON.stringify(res.data.userInfo)).then(
+            (data) => {
+              redirect();
+            }
+          );
         } else {
           toast({
             title: "Authentication failed.",
@@ -54,16 +56,17 @@ export const CustomAuthProvider = ({ children }) => {
   };
 
   const appLogout = useCallback(() => {
-    localStorage.clear();
+    StorageUtils.clear();
     window.location.reload(false);
   }, []);
 
-  const isAppUserAuthenticated = useCallback(() => {
-    return localStorage.getItem("user") != null;
+  const isAppUserAuthenticated = useCallback(async () => {
+    return (await StorageUtils.loadData("user")) != null;
   }, []);
 
-  const appUser = () => {
-    return JSON.parse(localStorage.getItem("user"));
+  const appUser = async () => {
+    const user = await StorageUtils.loadData("user");
+    return JSON.parse(user);
   };
 
   return (
