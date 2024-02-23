@@ -51,6 +51,43 @@ export const CustomAuthProvider = ({ children }) => {
       });
   }, []);
 
+  const appRegister = useCallback((username, password, firstName, lastName) => {
+    const response = AuthService.register({
+      email: username,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+    });
+
+    response
+      .then((res) => {
+        console.log(res.data);
+
+        if (res.status === 200 || res.status === 201) {
+          toast({
+            title: "Registration successful.",
+            description: "User is able to register.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+
+          redirect();
+        } else {
+          toast({
+            title: "Registration failed.",
+            description: "Unable to Registration in the applciation",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const redirect = () => {
     window.location.reload(false);
   };
@@ -71,7 +108,13 @@ export const CustomAuthProvider = ({ children }) => {
 
   return (
     <CustomAuthContext.Provider
-      value={{ appUser, appLogin, appLogout, isAppUserAuthenticated }}
+      value={{
+        appUser,
+        appLogin,
+        appLogout,
+        isAppUserAuthenticated,
+        appRegister,
+      }}
     >
       {children}
     </CustomAuthContext.Provider>

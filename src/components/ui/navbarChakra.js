@@ -6,12 +6,12 @@ import {
   useColorModeValue,
   Stack,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import {
   Nav,
   NavItem,
   NavLink,
-  Button,
   UncontrolledDropdown,
   DropdownToggle,
   DropdownMenu,
@@ -62,8 +62,8 @@ export const NavbarChakra = ({ count }) => {
   const location = useLocation();
   // const [count, setCount] = useState(0);
 
-  const login = () => {
-    history.push("/login");
+  const register = () => {
+    history.push("/register");
   };
 
   useEffect(() => {
@@ -200,7 +200,7 @@ export const NavbarChakra = ({ count }) => {
                 ))}
             </HStack>
           </HStack>
-          {/* <Flex alignItems={"center"}> */}
+
           <Nav className="d-none d-md-block" navbar>
             {!loggedInUser && (
               <NavItem>
@@ -209,9 +209,9 @@ export const NavbarChakra = ({ count }) => {
                   color="primary"
                   className="btn-margin"
                   // onClick={() => loginWithRedirect()}
-                  onClick={login}
+                  onClick={register}
                 >
-                  Log in
+                  Register
                 </Button>
               </NavItem>
             )}
@@ -257,15 +257,6 @@ export const NavbarChakra = ({ count }) => {
                     exact
                     // activeClassName="router-link-exact-active"
                   >
-                    {/* <IconButton
-                      isRound={true}
-                      variant="solid"
-                      colorScheme="green"
-                      aria-label="Done"
-                      fontSize="100"
-                      icon={<CartIconButtonWithBadge badgeCount={count} />}
-                    />
-                    */}
                     <CartIconButton count={count} />
                   </NavLink>
                 </NavItem>
@@ -273,7 +264,7 @@ export const NavbarChakra = ({ count }) => {
             </Flex>
           )}
 
-          {!loggedInUser && (
+          {/* {!loggedInUser && (
             <Nav className="d-md-none" navbar>
               <NavItem>
                 <Button
@@ -281,13 +272,13 @@ export const NavbarChakra = ({ count }) => {
                   color="primary"
                   block
                   // onClick={() => loginWithRedirect({})}
-                  onClick={login}
+                  onClick={register}
                 >
-                  Log in
+                  Register
                 </Button>
               </NavItem>
             </Nav>
-          )}
+          )} */}
         </Flex>
         {/* </Flex> */}
 

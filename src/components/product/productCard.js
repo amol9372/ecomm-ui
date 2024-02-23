@@ -78,9 +78,12 @@ const ProductCard = ({ data, ...props }) => {
 
         <Image
           src={data.imageURL}
+          // src={
+          //   "https://ecomm-backend-images.s3.ca-central-1.amazonaws.com/55/iphone14pro-1.png"
+          // }
           alt={`Picture of ${truncateString(data.name, 30)}`}
           roundedTop="lg"
-          height={200}
+          height={190}
           width={250}
         />
 

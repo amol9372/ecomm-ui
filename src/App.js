@@ -21,6 +21,8 @@ import MySocketComponent from "./events";
 import Events from "./events";
 import CartService from "./api/cartService";
 import { stepButtonClasses } from "@mui/material";
+import Register from "./components/user-auth/register";
+import ProfilePage from "./components/user-auth/profile";
 initFontAwesome();
 
 const App = () => {
@@ -81,7 +83,8 @@ const App = () => {
             <Route path="/" exact component={Home} />
             <Route path="/home" exact component={Home} />
             <Route path="/login" exact component={LoginUser} />
-            {/* <Route path="/profile" exact component={Profile} /> */}
+            <Route path="/register" exact component={Register} />
+            <Route path="/profile" exact component={ProfilePage} />
             {/* <Route path="/external-api" exact component={ExternalApi} /> */}
             <Route path="/add-product" exact component={AddProduct} />
             <Route
